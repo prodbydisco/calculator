@@ -227,9 +227,43 @@ deleteButton.addEventListener('click', deleteNumber);
 document.addEventListener('keydown', function(event) { // delete numbers by pressing 'backspace' on the keyboard
     
     if (event.key === 'Backspace') {
+
         deleteNumber();
         event.preventDefault(); // prevent the browser from navigating back
     }
+});
+
+
+document.addEventListener('keydown', function(event) { // keyboard functionality
+
+    event.preventDefault();
+
+    if (event.key === '.') addDecimal();
+    if (event.key === 'Delete') cancel();
+    if (event.key === 'Enter') compute();
+    
+    // call buttons conditionally
+    numberButtons.forEach((button) => {
+
+        if (button.innerHTML === event.key) {
+            button.click();
+        }
+    });
+
+    operatorButtons.forEach((button) => {
+        let buttonText = button.innerHTML;
+
+        if (event.key === buttonText) {
+            button.click();
+
+        } else if (event.key === '/' && buttonText === '÷') {
+            button.click();
+
+        } else if (event.key === '*' && buttonText === 'x') {
+            button.click();
+
+        }
+    });
 });
 
 
