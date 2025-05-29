@@ -227,7 +227,6 @@ deleteButton.addEventListener('click', deleteNumber);
 document.addEventListener('keydown', function(event) { // delete numbers by pressing 'backspace' on the keyboard
     
     if (event.key === 'Backspace') {
-        console.log('backspace');
         deleteNumber();
         event.preventDefault(); // prevent the browser from navigating back
     }
