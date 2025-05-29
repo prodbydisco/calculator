@@ -1,0 +1,201 @@
+html, body {
+    margin: 0;
+
+    /* removes default text highlight */
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none;    /* Firefox */
+    -ms-user-select: none;     /* Internet Explorer/Edge */
+    user-select: none;  
+}
+
+body {
+    width: 100%;
+    height: 100dvh;
+
+    background-color: rgb(245, 245, 245);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+}
+
+.display-box {
+    position: absolute;
+    width: 200px;
+    height: 100px;
+    margin: 0 auto;
+    top: 40px;
+
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+
+    background-color: rgb(250, 250, 250);
+    border: 2px dashed black;
+    cursor: pointer;
+}
+
+.invisible {
+    display: none;
+}
+
+.calculator {
+    background-color: rgb(29, 29, 29);
+    width: 400px;
+    height: 600px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+
+    border-radius: 8px;
+    padding: 32px;
+    margin-bottom: 220px;
+
+    box-sizing: border-box;
+}
+
+.buttons {
+    font-family: "JetBrainss Mono", monospace;
+    font-weight: 600;
+    font-size: 18px;
+    padding: 0;
+    color: black;
+}
+
+.screen {
+    width: 100%;
+    height: 64px;
+    margin: 12px 0;
+    padding: 6px;
+
+    display: flex;
+    text-align: right;
+    flex-direction: column;
+    justify-content: end;
+
+    font-family: "Jersey 10", sans-serif;
+    font-weight: 400;
+    font-size: 42px;
+    letter-spacing: 4px;
+    border: 2px solid rgb(175, 175, 175);
+    background-color: rgb(202, 202, 202);
+    border-radius: 4px;
+    cursor: copy;
+
+    box-sizing: border-box;
+}
+
+.top-row {
+    padding: 16px 2px;
+    display: flex;
+    flex-direction: row;
+    align-items:end;
+    justify-content: space-between;
+
+    box-sizing: border-box;
+}
+
+#logo {
+    margin: 0;
+    padding: 2px; 
+    font-family: "JetBrains Mono", monospace;
+    font-size: 32px;
+    color: rgb(235, 235, 235);
+}
+
+.top-row > .buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.top-row > .buttons > div {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    width: 62px;
+    height: 62px;
+    border-radius: 50%;
+    background-color: rgb(231, 231, 231);
+
+    box-sizing: border-box;
+}
+
+#cancel {
+    background-color: rgb(255, 56, 56);
+    color: rgb(250, 250, 250);
+}
+
+
+.main-buttons {
+    width: 100%;
+    flex: 1;
+    flex-basis: 80%;
+
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+
+    font-family: "JetBrainss Mono", monospace;
+    font-weight: 600;
+    font-size: 18px;
+    padding: 0;
+    color: black;
+}
+
+
+.buttons-left {
+    flex: 1 0 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    box-sizing: border-box;
+}
+
+.button-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+}
+.last-row {
+    flex-direction: row;
+}
+
+.buttons-right {
+    width: 24%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    justify-content: space-between;
+
+    box-sizing: border-box;
+}
+
+
+.button-row > div, .buttons-right > div {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    background-color: rgb(231, 231, 231);
+
+    box-sizing: border-box;
+}
+.main-buttons > * > div:hover {
+    cursor: pointer;
+}
+
+div .operator {
+    background-color: rgb(241, 166, 27);
+}
