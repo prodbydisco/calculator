@@ -7,52 +7,60 @@ const cancelButton = document.querySelector('#cancel');
 const deleteButton = document.querySelector('#delete');
 const decimalButton = document.querySelector('.decimal');
 
+// create and style an alert box
 const displayBox = document.createElement('div');
 displayBox.classList.add('display-box');
 displayBox.classList.add('invisible');
 
 const buttonsLeft = [ 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, '.', '=' ];
 const buttonsRight = [ '&divide;', 'x', '+', '-' ];
-
 let numbers = [];
 let firstNumber = null, secondNumber = null;
 let operator = '';
 
-screen.textContent = '80085'; // placeholder text for screen
-screen.style.color = 'rgba(0, 0, 0, 0.2)'; // lighter colour to indicate placeholder text
+// placeholder text for screen
+screen.textContent = '80085';
+screen.style.color = 'rgba(0, 0, 0, 0.2)';
 
 
-// create 4 button rows for the left side
+// create 4 rows for the left side & populate button values using buttonsLeft
 for (let i = 0; i < 12; i+=3) {
-    
-    const buttonRow = document.createElement('div'); // create a row
-    buttonRow.classList.add('button-row');
-    if (i > 6) {buttonRow.classList.add('last-row')}; // if row is last row, give it unique class
-    btnsLeftContainer.appendChild(buttonRow); // add row to button section
 
-    const buttonSlice = buttonsLeft.slice(i, i+3); // populate button rows on left side (3 items at a time)
+    const buttonRow = document.createElement('div');
+    const buttonSlice = buttonsLeft.slice(i, i+3); // populate 3 buttons for each row
+
+    buttonRow.classList.add('button-row');
+    if (i > 6) {buttonRow.classList.add('last-row')}; // give last row unique class for reversal
+    btnsLeftContainer.appendChild(buttonRow);
+
     
-    buttonSlice.map((item) => { // for each 3 of the items
-        const buttonLeft = document.createElement('div'); // create a div
+    buttonSlice.map((item) => { // for each 3, create a button (div)
+        const buttonLeft = document.createElement('div');
         
+        // add respective classes and functions
         if (item === '=') {
+
             buttonLeft.classList.add('compute');
             buttonLeft.onclick = compute;
+
         } else if (item === '.') {
+
             buttonLeft.classList.add('decimal');
             buttonLeft.onclick = addDecimal;
+
         } else {
             buttonLeft.classList.add('number');
-        }; // add respective class
+        };
 
-        buttonLeft.textContent = String(item); // populate w/text
-        buttonRow.appendChild(buttonLeft); // add div to 'button-row'
+        buttonLeft.textContent = String(item);
+        buttonRow.appendChild(buttonLeft);
     })
 
 };
 
-// populate button column on the right side
+// populate operator buttons
 buttonsRight.map((item) => {
+
     const buttonRight = document.createElement('div');
     
     buttonRight.innerHTML = String(item);
@@ -64,137 +72,170 @@ buttonsRight.map((item) => {
 
 // Click screen to copy text and show/hide alert
 screen.addEventListener('click', (e) => {
+
     const textContent = document.getElementById("screen").innerText; // get text
     
-    // if screen is clear, return error message
+    // return alert
     if (textContent === '') {
+
         displayBox.textContent = 'Error. No text to copy.';
-        displayBox.style.backgroundColor = 'rgb(255, 75, 75)';
+        displayBox.style.backgroundColor = 'rgb(255, 75, 75)'; // indicate error
+
     } else {
+
         navigator.clipboard.writeText(textContent);
         displayBox.textContent = 'Copied to clipboard.';
         displayBox.style.backgroundColor = 'rgb(250, 250, 250)';
+
     };
 
+    // show alert box
     displayBox.classList.toggle('invisible');
     body.appendChild(displayBox);
 
-    body.classList.toggle('cursor-pointer');
+    body.classList.toggle('cursor-pointer'); // indicate that the body is clickable
 
-    e.stopPropagation(); // stop here
+    e.stopPropagation(); // stop here to prevent calling the body listener
     
+    // close the alert by clicking anywhere (body)
     body.addEventListener('click', () => {
+
         displayBox.classList.toggle('invisible');
         body.classList.toggle('cursor-pointer');
-    }, { once:true });
+
+    }, { once:true }); // unhook after alert is hidden
 });
 
 
 
-const numberButtons = document.querySelectorAll('.number');
-// add number to numbers array when clicked to form one number
-numberButtons.forEach((button) => {
-    
+
+const numberButtons = document.querySelectorAll('.number'); // buttons '0' to '9'
+
+numberButtons.forEach((button) => { // allow user to make one number by clicking numbers
+
     button.addEventListener('click', () => {
-        if (firstNumber != null && operator === '') {
-            return;
-        } else {
-            numbers.push(Number(button.innerText));
-            updateDisplay();
-        }
         
-    })
+        // disable numbers if calculation is last operation (requires operator next) 
+        if (firstNumber != null && operator === '') { 
+            return; 
+        } else {
+
+            numbers.push(Number(button.innerText)); 
+            updateDisplay();
+        }  
+    });
 });
 
 
-const operatorButtons = document.querySelectorAll('.operator');
-// assign respective operators for operator buttons
-operatorButtons.forEach((button) => {
+
+const operatorButtons = document.querySelectorAll('.operator'); // divide, multiply, plus, subtract
+
+operatorButtons.forEach((button) => { // assign respective operators for operator buttons
+
     let buttonText = button.innerText;
     
+    // assign operator to variable for compute()
     button.addEventListener('click', () => {
         
-        if (firstNumber != null && numbers.length > 0) {
+        if (firstNumber != null && numbers.length > 0) { // use an operator to calculate two numbers
+            
             secondNumber = numbers.join('');
             compute();
+            
             operator = buttonText;
-        } else if (numbers.length > 0 || firstNumber != null) {
+            updateDisplay();
+
+        } else if (numbers.length > 0 || firstNumber != null) { // change operator from existing choice
+            
             operator = buttonText;
             
+            // assign number to first choice and clear number
             if (firstNumber == null) firstNumber = parseFloat(numbers.join(''));
-            numbers = []; // reset numbers
+            numbers = [];
             
             updateDisplay();
+
         } else {
             return;
         }
-
-    })
+    });
 });
+
 
 
 function updateDisplay() {
-    screen.style.color = 'rgba(0, 0, 0, 0.9)';
 
-    if (firstNumber != null) {
+    screen.style.color = 'rgba(0, 0, 0, 0.9)'; // change from placeholder text colour
+
+    if (firstNumber != null) { // update screen depending on what variables are populated
+
         (operator === '') ? 
         screen.textContent = `${firstNumber}`:
         screen.textContent = `${firstNumber} ${operator} ${numbers.join('')}`;
+
     } else {
-        screen.textContent = numbers.join(''); // update screen;
+        screen.textContent = numbers.join('');
     };
 };
 
 
-
 function addDecimal() {
+
     if (firstNumber != null && operator === '') {
         return;
     };
 
-    if (numbers.length < 1) {
+    if (numbers.length < 1) { // if no number is selected, add '0.'
         numbers.push('0');
         numbers.push('.');
-    } else if (numbers.indexOf('.') >= 0) {
+    } else if (numbers.indexOf('.') >= 0) { // disable if number already has decimal
         return;
     } else {
-        numbers.push('.');
+        numbers.push('.'); // add decimal point
     };
 
     updateDisplay();
 };
 
-function cancel() {
+
+function cancel() { // clear everything
+
     screen.textContent = '';
     firstNumber = null;
     secondNumber = null;
     numbers = [];
     operator = '';
 };
+
 cancelButton.addEventListener('click', cancel);
 
 
-function deleteNumber() {
-    if (numbers.length < 1) { // if array is empty
-        return; // do nothing
+function deleteNumber() { // delete one digit or decimal
+
+    if (numbers.length < 1) { // disable if already empty
+        return;
+
     } else {
-        numbers.pop(); // remove last number
+
+        numbers.pop(); // delete last digit
         updateDisplay();
     }
 };
+
 deleteButton.addEventListener('click', deleteNumber);
 
 
-function compute() {
+function compute() { // calculate problem
+    
     let calculation;
 
     if (numbers.length < 1) { // dont compute if value is missing
         return;
-    }
+    };
 
-    secondNumber = parseFloat(numbers.join('')); // assign number to second number
+    secondNumber = parseFloat(numbers.join('')); // assign number to second choice
 
-    switch(operator.toLowerCase()) {
+    switch(operator.toLowerCase()) { // calculate
         case '+':
             calculation = firstNumber + secondNumber;
             break;
@@ -209,11 +250,13 @@ function compute() {
             break;
         default:
             return;
-    }
-    firstNumber = parseFloat(calculation); // assign result to first number
-    // reset for next calculation
+    };
+
+    firstNumber = parseFloat(calculation); // assign result to first number for next calculation
+    
+    // reset other variables for next calculation
     secondNumber = null;
-    numbers = []; // reset number array
+    numbers = []; 
     operator = '';
 
     updateDisplay();
